@@ -45,7 +45,7 @@ export default async function NovoOrcamentoPage({
           Preencha os dados e escolha o equipamento
         </p>
       </header>
-      <FormularioOrcamento itens={itensDisponiveis} inicioPadrao={inicioTexto} />
+      <FormularioOrcamento itens={itensDisponiveis} inicioPadrao={inicioTexto} fimPadrao={fimTexto} />
     </div>
   )
 }

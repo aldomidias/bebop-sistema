@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 import { criarOrcamento } from '@/lib/actions/events'
 import { formatarMoeda } from '@/lib/format'
 
@@ -15,12 +16,15 @@ type ItemDisponivel = {
 export function FormularioOrcamento({
   itens,
   inicioPadrao,
+  fimPadrao,
 }: {
   itens: ItemDisponivel[]
   inicioPadrao: string
+  fimPadrao: string
 }) {
+  const router = useRouter()
   const [dataInicio, setDataInicio] = useState(inicioPadrao)
-  const [dataFim, setDataFim] = useState(inicioPadrao)
+  const [dataFim, setDataFim] = useState(fimPadrao)
   const [selecionados, setSelecionados] = useState<Record<string, number>>({})
   const [valorAjustado, setValorAjustado] = useState('')
   const [enviando, setEnviando] = useState(false)
@@ -125,8 +129,11 @@ export function FormularioOrcamento({
               type="date"
               value={dataInicio}
               onChange={(e) => {
-                setDataInicio(e.target.value)
-                if (e.target.value > dataFim) setDataFim(e.target.value)
+                const novoInicio = e.target.value
+                const novoFim = novoInicio > dataFim ? novoInicio : dataFim
+                setDataInicio(novoInicio)
+                setDataFim(novoFim)
+                router.replace(`/orcamento/novo?inicio=${novoInicio}&fim=${novoFim}`)
               }}
               required
               className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm"
@@ -138,7 +145,11 @@ export function FormularioOrcamento({
               type="date"
               value={dataFim}
               min={dataInicio}
-              onChange={(e) => setDataFim(e.target.value)}
+              onChange={(e) => {
+                const novoFim = e.target.value
+                setDataFim(novoFim)
+                router.replace(`/orcamento/novo?inicio=${dataInicio}&fim=${novoFim}`)
+              }}
               required
               className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm"
             />
