@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { buscarDisponibilidade } from '@/lib/queries/availability'
 import { formatarData } from '@/lib/format'
 
@@ -73,6 +74,12 @@ export default async function DisponibilidadePage({
         >
           Consultar
         </button>
+        <Link
+          href={`/orcamento/novo?inicio=${inicioTexto}&fim=${fimTexto}`}
+          className="rounded-md border border-marinho px-5 py-2 text-sm font-medium text-marinho"
+        >
+          Criar orçamento nestas datas
+        </Link>
       </form>
 
       <div className="space-y-6">
