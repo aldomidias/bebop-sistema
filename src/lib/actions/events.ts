@@ -3,6 +3,8 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import { validarPedido } from '@/lib/availability'
+import { buscarDisponibilidadeDeItem } from '@/lib/queries/availability'
 
 export type DadosOrcamento = {
   clienteNome: string
@@ -11,7 +13,7 @@ export type DadosOrcamento = {
   dataFim: string
   local: string
   tipo: string
-  itens: { itemId: string; quantidade: number; precoAplicado: number }[]
+  itens: { itemId: string; nome: string; quantidade: number; precoAplicado: number }[]
   valorAjustado: number | null
   observacoes: string | null
 }
@@ -30,6 +32,17 @@ export async function criarOrcamento(dados: DadosOrcamento) {
 
   if (dataFim.getTime() < dataInicio.getTime()) {
     throw new Error('A data de término não pode ser anterior à data de início.')
+  }
+
+  const disponivelPorItem: Record<string, number> = {}
+  for (const item of dados.itens) {
+    const disponibilidade = await buscarDisponibilidadeDeItem(item.itemId, dataInicio, dataFim)
+    disponivelPorItem[item.itemId] = disponibilidade?.disponivel ?? 0
+  }
+
+  const erros = validarPedido(dados.itens, disponivelPorItem)
+  if (erros.length > 0) {
+    throw new Error(erros.join('\n'))
   }
 
   const cliente = await db.cliente.create({

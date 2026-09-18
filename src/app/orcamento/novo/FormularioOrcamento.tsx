@@ -74,6 +74,7 @@ export function FormularioOrcamento({
         const item = itens.find((i) => i.id === itemId)
         return {
           itemId,
+          nome: item?.nome ?? itemId,
           quantidade,
           precoAplicado: item?.precoBaseDiaria ?? 0,
         }
