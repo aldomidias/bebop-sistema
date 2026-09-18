@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --cor-marinho: #14213D;
+  --cor-coral: #EB5757;
+  --cor-laranja: #F2994A;
+  --cor-fundo: #FFFFFF;
+  --cor-texto: #1A1A1A;
+  --cor-cinza-claro: #F4F5F7;
+  --cor-cinza-borda: #E1E4E8;
+  --cor-cinza-texto: #6B7280;
+}
+
+@theme inline {
+  --color-marinho: var(--cor-marinho);
+  --color-coral: var(--cor-coral);
+  --color-laranja: var(--cor-laranja);
+  --color-cinza-claro: var(--cor-cinza-claro);
+  --color-cinza-borda: var(--cor-cinza-borda);
+  --color-cinza-texto: var(--cor-cinza-texto);
+}
+
+body {
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
