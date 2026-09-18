@@ -35,4 +35,15 @@ A spec de produto e o design técnico vivem no workspace de negócio:
 
 ## Como rodar
 
-Instruções chegam junto com a primeira versão do código.
+```
+npm install
+npx prisma generate
+npx prisma migrate deploy
+npx prisma db seed
+npm run dev
+```
+
+O seed cria eventos com datas relativas ao dia em que ele é executado —
+rode `npx prisma db seed` novamente no dia da demonstração. Para testar
+no celular, basta abrir `http://<IP-da-máquina>:3000` em um dispositivo
+na mesma rede Wi-Fi.
