@@ -21,8 +21,14 @@ export default async function NovoOrcamentoPage({
   searchParams: Promise<{ inicio?: string; fim?: string }>
 }) {
   const params = await searchParams
-  const inicioTexto = params.inicio ?? proximoSabado()
-  const fimTexto = params.fim ?? inicioTexto
+
+  function dataValida(texto: string | undefined): boolean {
+    return texto !== undefined && !Number.isNaN(new Date(`${texto}T00:00:00`).getTime())
+  }
+
+  const inicioTexto = dataValida(params.inicio) ? (params.inicio as string) : proximoSabado()
+  let fimTexto = dataValida(params.fim) ? (params.fim as string) : inicioTexto
+  if (fimTexto < inicioTexto) fimTexto = inicioTexto
 
   const itens = await buscarDisponibilidade(
     new Date(`${inicioTexto}T00:00:00`),
