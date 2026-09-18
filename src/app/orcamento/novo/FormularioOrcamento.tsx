@@ -143,7 +143,7 @@ export function FormularioOrcamento({
   }
 
   return (
-    <form action={aoEnviar} className="space-y-5 pb-28">
+    <form action={aoEnviar} className="space-y-5">
       <Cartao>
         <div className="mb-4 flex items-center gap-3">
           <NumeroPasso n={1} />
@@ -257,28 +257,18 @@ export function FormularioOrcamento({
           <span className={ROTULO}>Observações</span>
           <textarea name="observacoes" rows={2} className="w-full rounded-campo border border-cinza-200 bg-white px-3 py-2 text-base text-navy" />
         </label>
-      </Cartao>
 
-      {erro && (
-        <div ref={erroRef} role="alert" className="rounded-cartao border border-vermelho/30 bg-white p-4 shadow-card">
-          <Led tom="vermelho" rotulo="Não deu para gerar" />
-          <p className="mt-2 whitespace-pre-line text-sm text-tinta">{erro}</p>
-        </div>
-      )}
-
-      <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-cinza-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:sticky md:bottom-0 md:rounded-cartao md:border">
-        <div className="mx-auto flex max-w-4xl items-center gap-4 px-4 py-3">
-          <div className="min-w-0">
-            <p className="text-xs text-cinza-700">Total</p>
-            <p className="font-titulo text-xl font-bold leading-tight text-navy">
-              {formatarMoeda(valorAjustado.trim() === '' ? total : Number(valorAjustado))}
-            </p>
+        {erro && (
+          <div ref={erroRef} role="alert" className="mt-4 rounded-cartao border border-vermelho/30 bg-white p-4 shadow-card">
+            <Led tom="vermelho" rotulo="Não deu para gerar" />
+            <p className="mt-2 whitespace-pre-line text-sm text-tinta">{erro}</p>
           </div>
-          <BotaoPrimario type="submit" disabled={enviando} className="flex-1">
-            {enviando ? 'Gerando…' : 'Gerar orçamento'}
-          </BotaoPrimario>
-        </div>
-      </div>
+        )}
+
+        <BotaoPrimario type="submit" disabled={enviando} className="mt-5">
+          {enviando ? 'Gerando…' : 'Gerar orçamento'}
+        </BotaoPrimario>
+      </Cartao>
     </form>
   )
 }
