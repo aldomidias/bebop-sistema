@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { calcularTotalFinal, contarDiarias } from '@/lib/pricing'
 import { formatarIntervalo, formatarMoeda, formatarData } from '@/lib/format'
 import { ROTULO_TIPO } from '@/lib/queries/events'
 import { PrintButton } from '@/components/PrintButton'
+import { Icone } from '@/components/Icones'
 import '../../documento.css'
 
 export const dynamic = 'force-dynamic'
@@ -28,11 +30,31 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
 
   return (
     <div className="documento">
-      <div className="sem-impressao mb-6 flex items-center justify-between gap-4">
+      <div className="sem-impressao mb-6 space-y-3">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/evento/${evento.id}`}
+              aria-label="Voltar ao evento"
+              className="flex h-10 w-10 items-center justify-center rounded-full border"
+              style={{ borderColor: 'var(--cor-cinza-200)', color: 'var(--cor-navy)' }}
+            >
+              <Icone nome="seta" tamanho={20} className="rotate-180" />
+            </Link>
+            <Link
+              href="/"
+              aria-label="Ir para o início"
+              className="flex h-10 w-10 items-center justify-center rounded-full border"
+              style={{ borderColor: 'var(--cor-cinza-200)', color: 'var(--cor-navy)' }}
+            >
+              <Icone nome="casa" tamanho={18} />
+            </Link>
+          </div>
+          <PrintButton />
+        </div>
         <p className="rounded-md bg-amber-50 px-4 py-2 text-sm text-amber-900">
           Texto de demonstração. O contrato definitivo usa o modelo próprio da Bebop.
         </p>
-        <PrintButton />
       </div>
 
       <header className="documento-cabecalho">

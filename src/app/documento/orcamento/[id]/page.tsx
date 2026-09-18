@@ -1,10 +1,12 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { calcularTotalFinal, contarDiarias } from '@/lib/pricing'
 import { formatarIntervalo, formatarMoeda, formatarData } from '@/lib/format'
 import { ROTULO_TIPO } from '@/lib/queries/events'
 import { PrintButton } from '@/components/PrintButton'
+import { Icone } from '@/components/Icones'
 import '../../documento.css'
 
 export const dynamic = 'force-dynamic'
@@ -34,7 +36,25 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
 
   return (
     <div className="documento">
-      <div className="sem-impressao mb-6 flex justify-end">
+      <div className="sem-impressao mb-6 flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/evento/${evento.id}`}
+            aria-label="Voltar ao evento"
+            className="flex h-10 w-10 items-center justify-center rounded-full border"
+            style={{ borderColor: 'var(--cor-cinza-200)', color: 'var(--cor-navy)' }}
+          >
+            <Icone nome="seta" tamanho={20} className="rotate-180" />
+          </Link>
+          <Link
+            href="/"
+            aria-label="Ir para o início"
+            className="flex h-10 w-10 items-center justify-center rounded-full border"
+            style={{ borderColor: 'var(--cor-cinza-200)', color: 'var(--cor-navy)' }}
+          >
+            <Icone nome="casa" tamanho={18} />
+          </Link>
+        </div>
         <PrintButton />
       </div>
 
