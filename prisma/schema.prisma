@@ -9,7 +9,6 @@ datasource db {
 
 // O conector SQLite do Prisma nao suporta enums; os valores sao gravados como texto
 // e os tipos correspondentes vivem em src/lib/db.ts
-// The database stores these as strings, but TypeScript provides type safety through exported types.
 
 model Categoria {
   id    String @id @default(cuid())
