@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// SQLite doesn't support native enums, so enum types are defined as constants in src/lib/db.ts
+// The database stores these as strings, but TypeScript provides type safety through exported types.
+
+model Categoria {
+  id    String @id @default(cuid())
+  nome  String @unique
+  ordem Int    @default(0)
+  itens Item[]
+}
+
+model Item {
+  id              String     @id @default(cuid())
+  nome            String
+  categoriaId     String
+  categoria       Categoria  @relation(fields: [categoriaId], references: [id])
+  quantidadeTotal Int
+  precoBaseDiaria Float
+  status          String @default("ativo")
+  observacao      String?
+  reservas        ItemReservado[]
+
+  @@index([categoriaId])
+}
+
+model Cliente {
+  id       String   @id @default(cuid())
+  nome     String
+  telefone String
+  email    String?
+  eventos  Evento[]
+}
+
+model Evento {
+  id            String          @id @default(cuid())
+  clienteId     String
+  cliente       Cliente         @relation(fields: [clienteId], references: [id])
+  dataInicio    DateTime
+  dataFim       DateTime
+  local         String
+  tipo          String      @default("outro")
+  status        String    @default("orcamento")
+  valorAjustado Float?
+  observacoes   String?
+  criadoEm      DateTime        @default(now())
+  itens         ItemReservado[]
+  checklist     Checklist?
+
+  @@index([dataInicio, dataFim])
+  @@index([status])
+}
+
+model ItemReservado {
+  id            String @id @default(cuid())
+  eventoId      String
+  evento        Evento @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  itemId        String
+  item          Item   @relation(fields: [itemId], references: [id])
+  quantidade    Int
+  precoAplicado Float
+
+  @@index([eventoId])
+  @@index([itemId])
+}
+
+model Checklist {
+  id          String   @id @default(cuid())
+  eventoId    String   @unique
+  evento      Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  observacoes String?
+  atualizadoEm DateTime @updatedAt
+}
