@@ -88,8 +88,8 @@ export async function confirmarEvento(eventoId: string) {
     include: { checklist: true },
   })
 
-  if (!evento) {
-    throw new Error('Evento não encontrado.')
+  if (!evento || evento.status !== 'orcamento') {
+    throw new Error('Só é possível confirmar um evento em orçamento')
   }
 
   await db.evento.update({
@@ -109,6 +109,12 @@ export async function confirmarEvento(eventoId: string) {
 }
 
 export async function cancelarEvento(eventoId: string) {
+  const evento = await db.evento.findUnique({ where: { id: eventoId } })
+
+  if (!evento) {
+    throw new Error('Evento não encontrado')
+  }
+
   await db.evento.update({
     where: { id: eventoId },
     data: { status: 'cancelado' },
