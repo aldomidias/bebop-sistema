@@ -59,4 +59,12 @@ describe('calcularTotalFinal', () => {
   it('aceita ajuste igual a zero como cortesia', () => {
     expect(calcularTotalFinal(itens, 1, 0)).toBe(0)
   })
+
+  it('ignora ajuste negativo e devolve total calculado', () => {
+    expect(calcularTotalFinal(itens, 1, -100)).toBe(600)
+  })
+
+  it('regressão: ajuste zero continua funcionando após correção do negativo', () => {
+    expect(calcularTotalFinal(itens, 1, 0)).toBe(0)
+  })
 })

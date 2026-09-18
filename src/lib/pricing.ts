@@ -24,7 +24,7 @@ export function calcularTotalFinal(
   diarias: number,
   valorAjustado: number | null
 ): number {
-  if (valorAjustado !== null && valorAjustado !== undefined) {
+  if (valorAjustado !== null && valorAjustado !== undefined && valorAjustado >= 0) {
     return valorAjustado
   }
   return calcularTotal(itens, diarias)
