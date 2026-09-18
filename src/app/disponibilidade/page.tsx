@@ -7,7 +7,10 @@ function proximoSabado(): string {
   const data = new Date()
   const dias = (6 - data.getDay() + 7) % 7
   data.setDate(data.getDate() + dias)
-  return data.toISOString().slice(0, 10)
+  const ano = data.getFullYear()
+  const mes = String(data.getMonth() + 1).padStart(2, '0')
+  const dia = String(data.getDate()).padStart(2, '0')
+  return `${ano}-${mes}-${dia}`
 }
 
 function paraData(texto: string): Date {
