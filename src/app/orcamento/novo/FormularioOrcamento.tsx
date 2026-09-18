@@ -242,7 +242,11 @@ export function FormularioOrcamento({
         </label>
       </section>
 
-      {erro && <p className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">{erro}</p>}
+      {erro && (
+        <p className="whitespace-pre-line rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
+          {erro}
+        </p>
+      )}
 
       <button
         type="submit"
