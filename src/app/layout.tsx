@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Outfit } from 'next/font/google'
-import { Navigation } from '@/components/Navigation'
+import { BarraNavegacao } from '@/components/BarraNavegacao'
+import { CabecalhoApp } from '@/components/CabecalhoApp'
 import './globals.css'
 
 const outfit = Outfit({
@@ -34,8 +35,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${outfit.variable} ${inter.variable}`}>
       <body className="min-h-screen pb-24 md:pb-8">
-        <Navigation />
-        <main className="mx-auto max-w-4xl px-4 py-6">{children}</main>
+        <CabecalhoApp />
+        <BarraNavegacao />
+        <main className="mx-auto max-w-4xl px-4 py-5">{children}</main>
       </body>
     </html>
   )
