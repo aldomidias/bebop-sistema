@@ -40,6 +40,28 @@ describe('intervalosSobrepoe', () => {
       intervalosSobrepoe(d('2026-10-10'), d('2026-10-10'), d('2026-10-10'), d('2026-10-10'))
     ).toBe(true)
   })
+
+  it('duas reservas no mesmo dia com horas diferentes se sobrepõem', () => {
+    expect(
+      intervalosSobrepoe(
+        new Date('2026-10-10T08:00:00'),
+        new Date('2026-10-10T08:00:00'),
+        new Date('2026-10-10T22:00:00'),
+        new Date('2026-10-10T22:00:00')
+      )
+    ).toBe(true)
+  })
+
+  it('uma reserva às 23h de um dia não se sobrepõe a outra às 1h do dia seguinte', () => {
+    expect(
+      intervalosSobrepoe(
+        new Date('2026-10-10T23:00:00'),
+        new Date('2026-10-10T23:00:00'),
+        new Date('2026-10-11T01:00:00'),
+        new Date('2026-10-11T01:00:00')
+      )
+    ).toBe(false)
+  })
 })
 
 const reserva = (
@@ -127,5 +149,17 @@ describe('calcularDisponibilidade', () => {
     const reservas = [reserva(4, 'confirmado', '2026-10-09', '2026-10-12')]
     const r = calcularDisponibilidade(26, 'ativo', reservas, d('2026-10-10'), d('2026-10-10'))
     expect(r.confirmadas).toBe(4)
+  })
+
+  it('reserva com quantidade negativa não aumenta o disponível', () => {
+    const reservas = [reserva(-5, 'confirmado', '2026-10-10', '2026-10-10')]
+    const r = calcularDisponibilidade(26, 'ativo', reservas, d('2026-10-10'), d('2026-10-10'))
+    expect(r.disponivel).toBe(26)
+  })
+
+  it('disponível nunca excede o total', () => {
+    const reservas = [reserva(-5, 'confirmado', '2026-10-10', '2026-10-10')]
+    const r = calcularDisponibilidade(26, 'ativo', reservas, d('2026-10-10'), d('2026-10-10'))
+    expect(r.disponivel).toBeLessThanOrEqual(r.total)
   })
 })

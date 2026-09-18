@@ -1,10 +1,19 @@
+function inicioDoDia(data: Date): Date {
+  return new Date(data.getFullYear(), data.getMonth(), data.getDate())
+}
+
 export function intervalosSobrepoe(
   aInicio: Date,
   aFim: Date,
   bInicio: Date,
   bFim: Date
 ): boolean {
-  return aInicio.getTime() <= bFim.getTime() && aFim.getTime() >= bInicio.getTime()
+  const aInicioDia = inicioDoDia(aInicio).getTime()
+  const aFimDia = inicioDoDia(aFim).getTime()
+  const bInicioDia = inicioDoDia(bInicio).getTime()
+  const bFimDia = inicioDoDia(bFim).getTime()
+
+  return aInicioDia <= bFimDia && aFimDia >= bInicioDia
 }
 
 export type StatusItem = 'ativo' | 'manutencao' | 'saindo_catalogo'
@@ -43,13 +52,16 @@ export function calcularDisponibilidade(
 
   const confirmadas = relevantes
     .filter((r) => r.status === 'confirmado')
-    .reduce((soma, r) => soma + r.quantidade, 0)
+    .reduce((soma, r) => soma + Math.max(0, r.quantidade), 0)
 
   const emOrcamento = relevantes
     .filter((r) => r.status === 'orcamento')
-    .reduce((soma, r) => soma + r.quantidade, 0)
+    .reduce((soma, r) => soma + Math.max(0, r.quantidade), 0)
 
-  const disponivel = Math.max(0, quantidadeTotal - confirmadas - emOrcamento)
+  const disponivel = Math.min(
+    quantidadeTotal,
+    Math.max(0, quantidadeTotal - confirmadas - emOrcamento)
+  )
 
   return { total: quantidadeTotal, confirmadas, emOrcamento, disponivel }
 }
