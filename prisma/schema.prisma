@@ -18,13 +18,13 @@ model Categoria {
 }
 
 model Item {
-  id              String     @id @default(cuid())
+  id              String          @id @default(cuid())
   nome            String
   categoriaId     String
-  categoria       Categoria  @relation(fields: [categoriaId], references: [id])
+  categoria       Categoria       @relation(fields: [categoriaId], references: [id])
   quantidadeTotal Int
   precoBaseDiaria Float
-  status          String @default("ativo")
+  status          String          @default("ativo")
   observacao      String?
   reservas        ItemReservado[]
 
@@ -46,8 +46,8 @@ model Evento {
   dataInicio    DateTime
   dataFim       DateTime
   local         String
-  tipo          String      @default("outro")
-  status        String    @default("orcamento")
+  tipo          String          @default("outro")
+  status        String          @default("orcamento")
   valorAjustado Float?
   observacoes   String?
   criadoEm      DateTime        @default(now())
@@ -72,9 +72,9 @@ model ItemReservado {
 }
 
 model Checklist {
-  id          String   @id @default(cuid())
-  eventoId    String   @unique
-  evento      Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
-  observacoes String?
+  id           String   @id @default(cuid())
+  eventoId     String   @unique
+  evento       Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  observacoes  String?
   atualizadoEm DateTime @updatedAt
 }
