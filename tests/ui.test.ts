@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { iconeDaCategoria, rotuloCurtoDaCategoria } from '@/components/categorias'
 import { LED_STATUS } from '@/components/Led'
 import { corDoMedidor, segmentosAcesos } from '@/components/medidor'
+import { saudacao, rotuloDia, diaGrande, agruparPorDia, passoDoEvento } from '@/components/inicio'
 
 describe('categorias', () => {
   it('mapeia cada categoria do catálogo para um ícone', () => {
@@ -63,5 +64,43 @@ describe('medidor de disponibilidade', () => {
     expect(segmentosAcesos(0, 0)).toBe(0)
     expect(segmentosAcesos(-3, 26)).toBe(0)
     expect(segmentosAcesos(30, 26)).toBe(12)
+  })
+})
+
+describe('início', () => {
+  it('saudação por hora', () => {
+    expect(saudacao(5)).toBe('Bom dia')
+    expect(saudacao(11)).toBe('Bom dia')
+    expect(saudacao(12)).toBe('Boa tarde')
+    expect(saudacao(17)).toBe('Boa tarde')
+    expect(saudacao(18)).toBe('Boa noite')
+    expect(saudacao(3)).toBe('Boa noite')
+  })
+
+  it('rótulo do dia no padrão do histórico do iFood', () => {
+    expect(rotuloDia(new Date('2026-09-25T00:00:00'))).toBe('Sex, 25/09/2026')
+    expect(rotuloDia(new Date('2026-09-26T00:00:00'))).toBe('Sáb, 26/09/2026')
+  })
+
+  it('dia grande para o card', () => {
+    expect(diaGrande(new Date('2026-10-02T00:00:00'))).toEqual({ dia: '02', semana: 'SEX' })
+  })
+
+  it('agrupa por dia mantendo a ordem', () => {
+    const grupos = agruparPorDia([
+      { id: 'a', dataInicio: new Date('2026-09-25T00:00:00') },
+      { id: 'b', dataInicio: new Date('2026-09-25T00:00:00') },
+      { id: 'c', dataInicio: new Date('2026-09-26T00:00:00') },
+    ])
+    expect(grupos.map((g) => g.rotulo)).toEqual(['Sex, 25/09/2026', 'Sáb, 26/09/2026'])
+    expect(grupos[0].eventos.map((e) => e.id)).toEqual(['a', 'b'])
+  })
+
+  it('passo do evento', () => {
+    expect(passoDoEvento('orcamento', false)).toBe(1)
+    expect(passoDoEvento('confirmado', false)).toBe(2)
+    expect(passoDoEvento('confirmado', true)).toBe(3)
+    expect(passoDoEvento('concluido', true)).toBe(3)
+    expect(passoDoEvento('cancelado', false)).toBe(1)
   })
 })

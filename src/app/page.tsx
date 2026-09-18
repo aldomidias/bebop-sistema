@@ -1,64 +1,71 @@
 import Link from 'next/link'
-import { buscarEventosProximos, ROTULO_TIPO } from '@/lib/queries/events'
-import { formatarIntervalo, formatarMoeda, formatarDiaSemana } from '@/lib/format'
-import { StatusBadge } from '@/components/StatusBadge'
+import { buscarEventosProximos } from '@/lib/queries/events'
+import { Cartao } from '@/components/Cartao'
+import { CartaoEvento } from '@/components/CartaoEvento'
+import { TituloSecao } from '@/components/TituloSecao'
+import { BotaoPrimario } from '@/components/Botoes'
+import { Icone, type NomeIcone } from '@/components/Icones'
+import { agruparPorDia, dataPorExtenso, saudacao } from '@/components/inicio'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AgendaPage() {
+const ATALHOS: { href: string; rotulo: string; icone: NomeIcone }[] = [
+  { href: '/orcamento/novo', rotulo: 'Novo orçamento', icone: 'recibo' },
+  { href: '/disponibilidade', rotulo: 'Disponibilidade', icone: 'medidor' },
+  { href: '#agenda', rotulo: 'Agenda', icone: 'calendario' },
+  { href: '/catalogo', rotulo: 'Catálogo', icone: 'caixa' },
+]
+
+export default async function InicioPage() {
   const eventos = await buscarEventosProximos()
+  const agora = new Date()
+  const [proximo, ...restantes] = eventos
+  const grupos = agruparPorDia(restantes)
 
   return (
-    <div>
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold text-navy">Agenda</h1>
-        <p className="mt-1 text-sm text-cinza-700">
-          {eventos.length === 0
-            ? 'Nenhum evento agendado'
-            : `${eventos.length} ${eventos.length === 1 ? 'evento' : 'eventos'} pela frente`}
-        </p>
+    <div className="space-y-6">
+      <header>
+        <p className="text-sm text-cinza-700">{saudacao(agora.getHours())}, Durval</p>
+        <h1 className="mt-0.5 font-titulo text-2xl font-semibold text-navy">{dataPorExtenso(agora)}</h1>
       </header>
 
-      {eventos.length === 0 ? (
-        <div className="rounded-lg border border-cinza-200 bg-cinza-100 p-8 text-center">
-          <p className="text-cinza-700">Nada agendado ainda.</p>
-          <Link
-            href="/orcamento/novo"
-            className="mt-4 inline-block rounded-lg bg-navy px-5 py-2.5 text-sm font-medium text-white"
-          >
-            Criar orçamento
+      <nav aria-label="Atalhos" className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {ATALHOS.map((atalho) => (
+          <Link key={atalho.rotulo} href={atalho.href}>
+            <Cartao className="flex h-24 flex-col items-center justify-center gap-2 active:bg-cinza-100">
+              <span className="text-navy"><Icone nome={atalho.icone} tamanho={28} /></span>
+              <span className="text-sm font-medium text-navy">{atalho.rotulo}</span>
+            </Cartao>
           </Link>
-        </div>
+        ))}
+      </nav>
+
+      {proximo ? (
+        <section>
+          <TituloSecao titulo="Próximo evento" />
+          <CartaoEvento evento={proximo} destaque />
+        </section>
       ) : (
-        <ul className="space-y-3">
-          {eventos.map((evento) => (
-            <li key={evento.id}>
-              <Link
-                href={`/evento/${evento.id}`}
-                className="block rounded-lg border border-cinza-200 p-4 transition-colors hover:border-navy"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="font-semibold text-navy">{evento.cliente}</p>
-                    <p className="mt-0.5 text-sm text-cinza-700">
-                      {ROTULO_TIPO[evento.tipo]} · {evento.local}
-                    </p>
-                  </div>
-                  <StatusBadge status={evento.status} />
-                </div>
-                <div className="mt-3 flex items-center justify-between text-sm">
-                  <span className="text-navy">
-                    {formatarIntervalo(evento.dataInicio, evento.dataFim)}
-                    <span className="ml-2 capitalize text-cinza-700">
-                      {formatarDiaSemana(evento.dataInicio)}
-                    </span>
-                  </span>
-                  <span className="font-medium text-navy">{formatarMoeda(evento.total)}</span>
-                </div>
-              </Link>
-            </li>
+        <Cartao className="flex flex-col items-center gap-3 py-8 text-center">
+          <span className="text-cinza-400"><Icone nome="caixa" tamanho={40} /></span>
+          <p className="font-medium text-navy">Nenhum evento pela frente</p>
+          <p className="text-sm text-cinza-700">Comece pelo orçamento — leva menos de um minuto.</p>
+          <BotaoPrimario href="/orcamento/novo" className="mt-2 max-w-xs">Novo orçamento</BotaoPrimario>
+        </Cartao>
+      )}
+
+      {grupos.length > 0 && (
+        <section id="agenda" className="space-y-4">
+          <TituloSecao titulo="Agenda" />
+          {grupos.map((grupo) => (
+            <div key={grupo.rotulo} className="space-y-3">
+              <p className="text-sm font-medium text-cinza-700">{grupo.rotulo}</p>
+              {grupo.eventos.map((evento) => (
+                <CartaoEvento key={evento.id} evento={evento} />
+              ))}
+            </div>
           ))}
-        </ul>
+        </section>
       )}
     </div>
   )

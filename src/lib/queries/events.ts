@@ -10,6 +10,7 @@ export type EventoResumo = {
   tipo: string
   status: 'orcamento' | 'confirmado' | 'concluido' | 'cancelado'
   total: number
+  temChecklist: boolean
 }
 
 export const ROTULO_TIPO: Record<string, string> = {
@@ -29,7 +30,7 @@ export async function buscarEventosProximos(): Promise<EventoResumo[]> {
       dataFim: { gte: inicioDeHoje },
       status: { not: 'cancelado' },
     },
-    include: { cliente: true, itens: true },
+    include: { cliente: true, itens: true, checklist: true },
     orderBy: { dataInicio: 'asc' },
   })
 
@@ -49,5 +50,6 @@ export async function buscarEventosProximos(): Promise<EventoResumo[]> {
       contarDiarias(evento.dataInicio, evento.dataFim),
       evento.valorAjustado
     ),
+    temChecklist: evento.checklist !== null,
   }))
 }
