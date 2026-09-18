@@ -41,10 +41,10 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
       <header className="documento-cabecalho">
         <Image src="/logo-bebop.png" alt="Bebop Som e Luz" width={160} height={67} priority />
         <div className="text-right">
-          <h1 className="text-xl font-bold" style={{ color: '#14213D' }}>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--cor-navy)' }}>
             Proposta de Locação
           </h1>
-          <p className="mt-0.5 text-sm" style={{ color: '#6B7280' }}>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--cor-cinza-700)' }}>
             Emitida em {formatarData(evento.criadoEm)}
           </p>
         </div>
@@ -52,12 +52,12 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
 
       <section className="mt-6 grid gap-4 sm:grid-cols-2">
         <div>
-          <p className="text-xs uppercase tracking-wide" style={{ color: '#6B7280' }}>Cliente</p>
+          <p className="text-xs uppercase tracking-wide" style={{ color: 'var(--cor-cinza-700)' }}>Cliente</p>
           <p className="mt-1 font-semibold">{evento.cliente.nome}</p>
           <p className="text-sm">{evento.cliente.telefone}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide" style={{ color: '#6B7280' }}>Evento</p>
+          <p className="text-xs uppercase tracking-wide" style={{ color: 'var(--cor-cinza-700)' }}>Evento</p>
           <p className="mt-1 font-semibold">{ROTULO_TIPO[evento.tipo]}</p>
           <p className="text-sm">{evento.local}</p>
           <p className="text-sm">
@@ -68,7 +68,7 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
       </section>
 
       <section className="mt-8">
-        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#14213D' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--cor-navy)' }}>
           Equipamento incluído
         </h2>
         <table className="documento-tabela">
@@ -97,7 +97,7 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
 
       <section
         className="mt-6 flex items-center justify-between rounded-lg px-5 py-4"
-        style={{ background: '#14213D', color: 'white' }}
+        style={{ background: 'var(--cor-navy)', color: 'white' }}
       >
         <span className="font-medium">Valor total</span>
         <span className="text-2xl font-bold">{formatarMoeda(total)}</span>
@@ -105,15 +105,15 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
 
       {evento.observacoes && (
         <section className="mt-6">
-          <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#14213D' }}>
+          <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--cor-navy)' }}>
             Observações
           </h2>
           <p className="mt-2 text-sm">{evento.observacoes}</p>
         </section>
       )}
 
-      <section className="mt-8 text-sm" style={{ color: '#6B7280' }}>
-        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: '#14213D' }}>
+      <section className="mt-8 text-sm" style={{ color: 'var(--cor-cinza-700)' }}>
+        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--cor-navy)' }}>
           Condições
         </h2>
         <ul className="mt-2 space-y-1">
@@ -123,7 +123,7 @@ export default async function OrcamentoDocumento({ params }: { params: Promise<{
         </ul>
       </section>
 
-      <footer className="mt-10 border-t pt-4 text-center text-xs" style={{ borderColor: '#E1E4E8', color: '#6B7280' }}>
+      <footer className="mt-10 border-t pt-4 text-center text-xs" style={{ borderColor: 'var(--cor-cinza-200)', color: 'var(--cor-cinza-700)' }}>
         Bebop Som e Luz · Locação de equipamento para eventos
       </footer>
     </div>

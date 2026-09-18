@@ -3,7 +3,7 @@
   margin: 0 auto;
   padding: 1.5cm 1.2cm;
   background: white;
-  color: #1a1a1a;
+  color: var(--cor-tinta);
 }
 
 .documento-cabecalho {
@@ -12,7 +12,11 @@
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #14213d;
+  border-bottom: 2px solid var(--cor-navy);
+}
+
+.documento-cabecalho h1 {
+  font-family: var(--font-titulo);
 }
 
 .documento-tabela {
@@ -26,14 +30,14 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6b7280;
+  color: var(--cor-cinza-700);
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e1e4e8;
+  border-bottom: 1px solid var(--cor-cinza-200);
 }
 
 .documento-tabela td {
   padding: 0.6rem 0;
-  border-bottom: 1px solid #f0f1f3;
+  border-bottom: 1px solid var(--cor-cinza-100);
   font-size: 0.9rem;
 }
 

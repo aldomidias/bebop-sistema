@@ -38,10 +38,10 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       <header className="documento-cabecalho">
         <Image src="/logo-bebop.png" alt="Bebop Som e Luz" width={140} height={59} />
         <div className="text-right">
-          <h1 className="text-lg font-bold" style={{ color: '#14213D' }}>
+          <h1 className="text-lg font-bold" style={{ color: 'var(--cor-navy)' }}>
             Contrato de Locação de Equipamento
           </h1>
-          <p className="mt-0.5 text-sm" style={{ color: '#6B7280' }}>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--cor-cinza-700)' }}>
             {formatarData(new Date())}
           </p>
         </div>
@@ -62,7 +62,7 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       </section>
 
       <section className="mt-6">
-        <h2 className="text-sm font-semibold" style={{ color: '#14213D' }}>
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--cor-navy)' }}>
           Cláusula 1 — Objeto
         </h2>
         <p className="mt-1 text-sm">
@@ -91,7 +91,7 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       </section>
 
       <section className="mt-6">
-        <h2 className="text-sm font-semibold" style={{ color: '#14213D' }}>
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--cor-navy)' }}>
           Cláusula 2 — Valor
         </h2>
         <p className="mt-1 text-sm">
@@ -101,7 +101,7 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       </section>
 
       <section className="mt-6">
-        <h2 className="text-sm font-semibold" style={{ color: '#14213D' }}>
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--cor-navy)' }}>
           Cláusula 3 — Montagem e retirada
         </h2>
         <p className="mt-1 text-sm">
@@ -111,7 +111,7 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       </section>
 
       <section className="mt-6">
-        <h2 className="text-sm font-semibold" style={{ color: '#14213D' }}>
+        <h2 className="text-sm font-semibold" style={{ color: 'var(--cor-navy)' }}>
           Cláusula 4 — Conservação
         </h2>
         <p className="mt-1 text-sm">
@@ -121,10 +121,10 @@ export default async function ContratoDocumento({ params }: { params: Promise<{ 
       </section>
 
       <section className="mt-10 grid gap-8 sm:grid-cols-2">
-        <div className="border-t pt-2 text-center text-sm" style={{ borderColor: '#1a1a1a' }}>
+        <div className="border-t pt-2 text-center text-sm" style={{ borderColor: 'var(--cor-tinta)' }}>
           Bebop Som e Luz
         </div>
-        <div className="border-t pt-2 text-center text-sm" style={{ borderColor: '#1a1a1a' }}>
+        <div className="border-t pt-2 text-center text-sm" style={{ borderColor: 'var(--cor-tinta)' }}>
           {evento.cliente.nome}
         </div>
       </section>

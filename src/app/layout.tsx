@@ -1,6 +1,21 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter, Outfit } from 'next/font/google'
 import { Navigation } from '@/components/Navigation'
 import './globals.css'
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['500', '600', '700'],
+  variable: '--fonte-outfit',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--fonte-inter',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Bebop Som e Luz',
@@ -12,12 +27,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  themeColor: '#F2F4F6',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
-      <body className="min-h-screen pb-20 md:pb-0">
+    <html lang="pt-BR" className={`${outfit.variable} ${inter.variable}`}>
+      <body className="min-h-screen pb-24 md:pb-8">
         <Navigation />
         <main className="mx-auto max-w-4xl px-4 py-6">{children}</main>
       </body>

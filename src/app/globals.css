@@ -1,27 +1,122 @@
 @import "tailwindcss";
 
 :root {
-  --cor-marinho: #14213D;
-  --cor-coral: #EB5757;
-  --cor-laranja: #F2994A;
-  --cor-fundo: #FFFFFF;
-  --cor-texto: #1A1A1A;
-  --cor-cinza-claro: #F4F5F7;
-  --cor-cinza-borda: #E1E4E8;
-  --cor-cinza-texto: #6B7280;
+  /* Base — do design-guide, amostrado da logo */
+  --cor-navy: #06213A;
+  --cor-navy-800: #0B2E4F;
+  --cor-navy-600: #14456F;
+  /* Acento — as três notas da logo; nunca fundo grande */
+  --cor-laranja: #F05829;
+  --cor-ambar: #EE8D2E;
+  --cor-vermelho: #E72D2A;
+  /* Semântico */
+  --cor-verde: #1E9E5A;
+  /* Neutros */
+  --cor-tinta: #1C1C1C;
+  --cor-cinza-700: #4A5462;
+  --cor-cinza-400: #9AA3AE;
+  --cor-cinza-200: #E3E7EB;
+  --cor-cinza-100: #F2F4F6;
+  --cor-branco: #FFFFFF;
+
+  --sombra-sm: 0 1px 2px rgba(6, 33, 58, 0.08);
+  --sombra-md: 0 4px 12px rgba(6, 33, 58, 0.10);
+  --sombra-lg: 0 12px 32px rgba(6, 33, 58, 0.14);
+
+  --raio-sm: 6px;
+  --raio-md: 10px;
+  --raio-lg: 16px;
+
+  --degrade-acento: linear-gradient(90deg, #EE8D2E, #F05829, #E72D2A);
 }
 
 @theme inline {
-  --color-marinho: var(--cor-marinho);
-  --color-coral: var(--cor-coral);
+  --color-navy: var(--cor-navy);
+  --color-navy-800: var(--cor-navy-800);
+  --color-navy-600: var(--cor-navy-600);
   --color-laranja: var(--cor-laranja);
-  --color-cinza-claro: var(--cor-cinza-claro);
-  --color-cinza-borda: var(--cor-cinza-borda);
-  --color-cinza-texto: var(--cor-cinza-texto);
+  --color-ambar: var(--cor-ambar);
+  --color-vermelho: var(--cor-vermelho);
+  --color-verde: var(--cor-verde);
+  --color-tinta: var(--cor-tinta);
+  --color-cinza-700: var(--cor-cinza-700);
+  --color-cinza-400: var(--cor-cinza-400);
+  --color-cinza-200: var(--cor-cinza-200);
+  --color-cinza-100: var(--cor-cinza-100);
+
+  --font-titulo: var(--fonte-outfit), system-ui, sans-serif;
+  --font-corpo: var(--fonte-inter), system-ui, sans-serif;
+
+  --shadow-card: var(--sombra-sm);
+  --shadow-flutuante: var(--sombra-md);
+  --shadow-destaque: var(--sombra-lg);
+
+  --radius-campo: var(--raio-sm);
+  --radius-botao: var(--raio-md);
+  --radius-cartao: var(--raio-lg);
 }
 
 body {
-  background: var(--cor-fundo);
-  color: var(--cor-texto);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--cor-cinza-100);
+  color: var(--cor-tinta);
+  font-family: var(--font-corpo);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-titulo);
+}
+
+/* Inputs: altura 48 no celular, foco navy */
+input, select, textarea {
+  font-family: var(--font-corpo);
+}
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--cor-navy-600);
+  outline-offset: 2px;
+}
+
+/* Medidor de disponibilidade (Task 4) */
+.medidor {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+}
+.medidor-seg {
+  flex: 1;
+  border-radius: 2px;
+  background: var(--cor-cinza-200);
+}
+.medidor-seg--aceso {
+  transform-origin: bottom;
+  animation: medidor-acender 400ms ease-out both;
+}
+.medidor--verde .medidor-seg--aceso { background: var(--cor-verde); }
+.medidor--ambar .medidor-seg--aceso { background: var(--cor-ambar); }
+.medidor--laranja .medidor-seg--aceso { background: var(--cor-laranja); }
+.medidor--vermelho .medidor-seg--aceso { background: var(--cor-vermelho); }
+.medidor--cinza .medidor-seg { background: var(--cor-cinza-200); opacity: 0.6; }
+
+@keyframes medidor-acender {
+  from { opacity: 0.2; transform: scaleY(0.4); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .medidor-seg--aceso { animation: none; }
+}
+
+/* Carrossel de chips: rola na horizontal sem barra visível */
+.carrossel {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.carrossel::-webkit-scrollbar { display: none; }
+.carrossel > * { scroll-snap-align: start; flex: 0 0 auto; }
+
+@media print {
+  body { background: white; }
 }

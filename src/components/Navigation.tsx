@@ -18,7 +18,7 @@ export function Navigation() {
   }
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-cinza-borda bg-white md:sticky md:top-0 md:border-b md:border-t-0">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-cinza-200 bg-white md:sticky md:top-0 md:border-b md:border-t-0">
       <div className="mx-auto flex max-w-4xl">
         {ITENS.map((item) => {
           const ativo = item.href === '/' ? caminho === '/' : caminho.startsWith(item.href)
@@ -27,7 +27,7 @@ export function Navigation() {
               key={item.href}
               href={item.href}
               className={`flex-1 px-2 py-4 text-center text-sm font-medium transition-colors ${
-                ativo ? 'text-marinho border-t-2 border-coral md:border-t-0 md:border-b-2' : 'text-cinza-texto'
+                ativo ? 'text-navy border-t-2 border-vermelho md:border-t-0 md:border-b-2' : 'text-cinza-700'
               }`}
             >
               {item.rotulo}

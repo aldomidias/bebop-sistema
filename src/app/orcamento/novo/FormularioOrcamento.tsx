@@ -111,20 +111,20 @@ export function FormularioOrcamento({
   return (
     <form action={aoEnviar} className="space-y-8">
       <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-cinza-texto">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-cinza-700">
           Cliente e evento
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Nome do cliente</span>
-            <input name="clienteNome" required className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm" />
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Nome do cliente</span>
+            <input name="clienteNome" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
           </label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Telefone</span>
-            <input name="clienteTelefone" required className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm" />
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Telefone</span>
+            <input name="clienteTelefone" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
           </label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Data de início</span>
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Data de início</span>
             <input
               type="date"
               value={dataInicio}
@@ -136,11 +136,11 @@ export function FormularioOrcamento({
                 router.replace(`/orcamento/novo?inicio=${novoInicio}&fim=${novoFim}`)
               }}
               required
-              className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm"
+              className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm"
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Data de término</span>
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Data de término</span>
             <input
               type="date"
               value={dataFim}
@@ -151,16 +151,16 @@ export function FormularioOrcamento({
                 router.replace(`/orcamento/novo?inicio=${dataInicio}&fim=${novoFim}`)
               }}
               required
-              className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm"
+              className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm"
             />
           </label>
           <label className="block sm:col-span-2">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Local</span>
-            <input name="local" required className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm" />
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Local</span>
+            <input name="local" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
           </label>
           <label className="block sm:col-span-2">
-            <span className="mb-1 block text-xs font-medium text-cinza-texto">Tipo de evento</span>
-            <select name="tipo" defaultValue="casamento" className="w-full rounded-md border border-cinza-borda px-3 py-2 text-sm">
+            <span className="mb-1 block text-xs font-medium text-cinza-700">Tipo de evento</span>
+            <select name="tipo" defaultValue="casamento" className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm">
               <option value="casamento">Casamento</option>
               <option value="quinze_anos">15 Anos</option>
               <option value="aniversario">Aniversário</option>
@@ -170,29 +170,29 @@ export function FormularioOrcamento({
           </label>
         </div>
         {diarias > 1 && (
-          <p className="mt-2 text-sm text-cinza-texto">
+          <p className="mt-2 text-sm text-cinza-700">
             {diarias} diárias · os valores abaixo são multiplicados por {diarias}
           </p>
         )}
       </section>
 
       <section>
-        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-cinza-texto">
+        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-cinza-700">
           Equipamento
         </h2>
-        <p className="mb-3 text-xs text-cinza-texto">
+        <p className="mb-3 text-xs text-cinza-700">
           Mostrando apenas o que está livre nas datas escolhidas.
         </p>
         <div className="space-y-5">
           {Array.from(porCategoria.entries()).map(([categoria, itensDaCategoria]) => (
             <div key={categoria}>
-              <h3 className="mb-2 text-xs font-semibold text-marinho">{categoria}</h3>
-              <ul className="divide-y divide-cinza-borda rounded-lg border border-cinza-borda">
+              <h3 className="mb-2 text-xs font-semibold text-navy">{categoria}</h3>
+              <ul className="divide-y divide-cinza-200 rounded-lg border border-cinza-200">
                 {itensDaCategoria.map((item) => (
                   <li key={item.id} className="flex items-center justify-between gap-3 px-3 py-2.5">
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-marinho">{item.nome}</p>
-                      <p className="text-xs text-cinza-texto">
+                      <p className="text-sm font-medium text-navy">{item.nome}</p>
+                      <p className="text-xs text-cinza-700">
                         {formatarMoeda(item.precoBaseDiaria)} · {item.disponivel} livres
                       </p>
                     </div>
@@ -203,7 +203,7 @@ export function FormularioOrcamento({
                       value={selecionados[item.id] ?? ''}
                       placeholder="0"
                       onChange={(e) => ajustarQuantidade(item.id, Number(e.target.value), item.disponivel)}
-                      className="w-20 shrink-0 rounded-md border border-cinza-borda px-2 py-1.5 text-center text-sm"
+                      className="w-20 shrink-0 rounded-md border border-cinza-200 px-2 py-1.5 text-center text-sm"
                     />
                   </li>
                 ))}
@@ -213,13 +213,13 @@ export function FormularioOrcamento({
         </div>
       </section>
 
-      <section className="rounded-lg bg-cinza-claro p-4">
+      <section className="rounded-lg bg-cinza-100 p-4">
         <div className="flex items-center justify-between">
-          <span className="text-sm text-cinza-texto">Total calculado</span>
-          <span className="text-xl font-bold text-marinho">{formatarMoeda(total)}</span>
+          <span className="text-sm text-cinza-700">Total calculado</span>
+          <span className="text-xl font-bold text-navy">{formatarMoeda(total)}</span>
         </div>
         <label className="mt-3 block">
-          <span className="mb-1 block text-xs font-medium text-cinza-texto">
+          <span className="mb-1 block text-xs font-medium text-cinza-700">
             Valor final (deixe vazio para usar o calculado)
           </span>
           <input
@@ -229,15 +229,15 @@ export function FormularioOrcamento({
             value={valorAjustado}
             onChange={(e) => setValorAjustado(e.target.value)}
             placeholder={String(total)}
-            className="w-full rounded-md border border-cinza-borda bg-white px-3 py-2 text-sm"
+            className="w-full rounded-md border border-cinza-200 bg-white px-3 py-2 text-sm"
           />
         </label>
         <label className="mt-3 block">
-          <span className="mb-1 block text-xs font-medium text-cinza-texto">Observações</span>
+          <span className="mb-1 block text-xs font-medium text-cinza-700">Observações</span>
           <textarea
             name="observacoes"
             rows={2}
-            className="w-full rounded-md border border-cinza-borda bg-white px-3 py-2 text-sm"
+            className="w-full rounded-md border border-cinza-200 bg-white px-3 py-2 text-sm"
           />
         </label>
       </section>
@@ -251,7 +251,7 @@ export function FormularioOrcamento({
       <button
         type="submit"
         disabled={enviando}
-        className="w-full rounded-lg bg-marinho px-6 py-3 font-medium text-white disabled:opacity-50"
+        className="w-full rounded-lg bg-navy px-6 py-3 font-medium text-white disabled:opacity-50"
       >
         {enviando ? 'Gerando...' : 'Gerar orçamento'}
       </button>

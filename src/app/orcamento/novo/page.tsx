@@ -46,8 +46,8 @@ export default async function NovoOrcamentoPage({
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-marinho">Novo orçamento</h1>
-        <p className="mt-1 text-sm text-cinza-texto">
+        <h1 className="text-2xl font-bold text-navy">Novo orçamento</h1>
+        <p className="mt-1 text-sm text-cinza-700">
           Preencha os dados e escolha o equipamento
         </p>
       </header>

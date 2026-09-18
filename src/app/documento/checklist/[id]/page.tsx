@@ -38,7 +38,7 @@ export default async function ChecklistDocumento({ params }: { params: Promise<{
         <PrintButton rotulo="Imprimir checklist" />
       </div>
 
-      <header className="border-b-2 pb-3" style={{ borderColor: '#1a1a1a' }}>
+      <header className="border-b-2 pb-3" style={{ borderColor: 'var(--cor-tinta)' }}>
         <h1 className="text-2xl font-bold">Checklist de Carga</h1>
         <p className="mt-1 text-lg">
           {evento.cliente.nome} · {ROTULO_TIPO[evento.tipo]}
@@ -64,11 +64,11 @@ export default async function ChecklistDocumento({ params }: { params: Promise<{
                 <li
                   key={reservado.id}
                   className="flex items-center gap-3 border-b py-2"
-                  style={{ borderColor: '#e5e5e5' }}
+                  style={{ borderColor: 'var(--cor-cinza-200)' }}
                 >
                   <span
                     className="inline-block shrink-0 border-2"
-                    style={{ width: '18px', height: '18px', borderColor: '#1a1a1a' }}
+                    style={{ width: '18px', height: '18px', borderColor: 'var(--cor-tinta)' }}
                   />
                   <span className="text-base font-medium">{reservado.item.nome}</span>
                   <span className="ml-auto text-lg font-bold">{reservado.quantidade}</span>
@@ -86,10 +86,10 @@ export default async function ChecklistDocumento({ params }: { params: Promise<{
 
       <section className="mt-8 hidden print:block">
         <div className="grid grid-cols-2 gap-8">
-          <div className="border-t pt-2 text-sm" style={{ borderColor: '#1a1a1a' }}>
+          <div className="border-t pt-2 text-sm" style={{ borderColor: 'var(--cor-tinta)' }}>
             Conferido na saída
           </div>
-          <div className="border-t pt-2 text-sm" style={{ borderColor: '#1a1a1a' }}>
+          <div className="border-t pt-2 text-sm" style={{ borderColor: 'var(--cor-tinta)' }}>
             Conferido no retorno
           </div>
         </div>
