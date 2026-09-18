@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { validarPedido } from '@/lib/availability'
 import { buscarDisponibilidadeDeItem } from '@/lib/queries/availability'
+import { ROTULO_TIPO } from '@/lib/queries/events'
 
 export type DadosOrcamento = {
   clienteNome: string
@@ -32,6 +33,10 @@ export async function criarOrcamento(dados: DadosOrcamento) {
 
   if (dataFim.getTime() < dataInicio.getTime()) {
     throw new Error('A data de término não pode ser anterior à data de início.')
+  }
+
+  if (!(dados.tipo in ROTULO_TIPO)) {
+    throw new Error('Tipo de evento inválido')
   }
 
   const disponivelPorItem: Record<string, number> = {}
