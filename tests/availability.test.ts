@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { intervalosSobrepoe } from '@/lib/availability'
-import { calcularDisponibilidade, type Reserva } from '@/lib/availability'
+import { calcularDisponibilidade, validarPedido, type Reserva } from '@/lib/availability'
 
 const d = (iso: string) => new Date(`${iso}T00:00:00`)
 
@@ -161,5 +161,82 @@ describe('calcularDisponibilidade', () => {
     const reservas = [reserva(-5, 'confirmado', '2026-10-10', '2026-10-10')]
     const r = calcularDisponibilidade(26, 'ativo', reservas, d('2026-10-10'), d('2026-10-10'))
     expect(r.disponivel).toBeLessThanOrEqual(r.total)
+  })
+})
+
+describe('validarPedido', () => {
+  it('retorna lista vazia para pedido válido', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 2 }],
+      { caixa: 12 }
+    )
+    expect(erros).toEqual([])
+  })
+
+  it('gera erro quando quantidade excede o disponível (plural)', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 15 }],
+      { caixa: 12 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: só 12 livres nessas datas'])
+  })
+
+  it('usa mensagem no singular quando só 1 está livre', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 2 }],
+      { caixa: 1 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: só 1 livre nessas datas'])
+  })
+
+  it('gera erro quando disponível é zero', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 1 }],
+      { caixa: 0 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: só 0 livres nessas datas'])
+  })
+
+  it('gera erro de quantidade inválida para número negativo', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: -1 }],
+      { caixa: 12 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: quantidade inválida'])
+  })
+
+  it('gera erro de quantidade inválida para número fracionário', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 1.5 }],
+      { caixa: 12 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: quantidade inválida'])
+  })
+
+  it('gera erro de quantidade inválida para zero', () => {
+    const erros = validarPedido(
+      [{ itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 0 }],
+      { caixa: 12 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: quantidade inválida'])
+  })
+
+  it('trata item sem entrada em disponivelPorItem como 0 livres', () => {
+    const erros = validarPedido(
+      [{ itemId: 'desconhecido', nome: 'Item Desconhecido', quantidade: 1 }],
+      {}
+    )
+    expect(erros).toEqual(['Item Desconhecido: só 0 livres nessas datas'])
+  })
+
+  it('acumula uma mensagem por item inválido', () => {
+    const erros = validarPedido(
+      [
+        { itemId: 'caixa', nome: 'Caixa Ativa', quantidade: 15 },
+        { itemId: 'mesa', nome: 'Mesa Digital', quantidade: 3 },
+      ],
+      { caixa: 12, mesa: 3 }
+    )
+    expect(erros).toEqual(['Caixa Ativa: só 12 livres nessas datas'])
   })
 })

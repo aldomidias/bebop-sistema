@@ -65,3 +65,25 @@ export function calcularDisponibilidade(
 
   return { total: quantidadeTotal, confirmadas, emOrcamento, disponivel }
 }
+
+export function validarPedido(
+  pedido: { itemId: string; nome: string; quantidade: number }[],
+  disponivelPorItem: Record<string, number>
+): string[] {
+  const erros: string[] = []
+
+  for (const item of pedido) {
+    if (!Number.isInteger(item.quantidade) || item.quantidade <= 0) {
+      erros.push(`${item.nome}: quantidade inválida`)
+      continue
+    }
+
+    const disponivel = disponivelPorItem[item.itemId] ?? 0
+    if (item.quantidade > disponivel) {
+      const unidade = disponivel === 1 ? 'livre' : 'livres'
+      erros.push(`${item.nome}: só ${disponivel} ${unidade} nessas datas`)
+    }
+  }
+
+  return erros
+}
