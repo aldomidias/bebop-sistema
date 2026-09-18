@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { iconeDaCategoria, rotuloCurtoDaCategoria } from '@/components/categorias'
 import { LED_STATUS } from '@/components/Led'
-import { corDoMedidor, segmentosAcesos } from '@/components/medidor'
+import { corDoMedidor, segmentosAcesos } from '@/components/medidor-utils'
 import { saudacao, rotuloDia, diaGrande, agruparPorDia, passoDoEvento } from '@/components/inicio'
 
 describe('categorias', () => {

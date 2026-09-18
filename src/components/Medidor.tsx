@@ -1,4 +1,4 @@
-import { corDoMedidor, segmentosAcesos, SEGMENTOS_PADRAO } from './medidor'
+import { corDoMedidor, segmentosAcesos, SEGMENTOS_PADRAO } from './medidor-utils'
 
 // Estilos em globals.css (.medidor, .medidor-seg). Animação só ao montar.
 export function Medidor({
