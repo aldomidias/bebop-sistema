@@ -28,6 +28,9 @@ prisma/*.db-journal
 # testes
 coverage/
 
+# capturas de tela geradas por scripts/capturas.mjs
+capturas/
+
 # sistema operacional
 .DS_Store
 Thumbs.db

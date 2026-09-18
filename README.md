@@ -46,4 +46,5 @@ npm run dev
 O seed cria eventos com datas relativas ao dia em que ele é executado —
 rode `npx prisma db seed` novamente no dia da demonstração. Para testar
 no celular, basta abrir `http://<IP-da-máquina>:3000` em um dispositivo
-na mesma rede Wi-Fi.
+na mesma rede Wi-Fi. Capturas das telas para conferência:
+`node scripts/capturas.mjs ./capturas` com o servidor rodando.
