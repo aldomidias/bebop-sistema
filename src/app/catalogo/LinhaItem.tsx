@@ -19,9 +19,11 @@ export function LinhaItem(props: Props) {
   const [preco, setPreco] = useState(props.precoBaseDiaria)
   const [status, setStatus] = useState(props.status)
   const [salvando, setSalvando] = useState(false)
+  const [erro, setErro] = useState<string | null>(null)
 
   async function salvar() {
     setSalvando(true)
+    setErro(null)
     try {
       await atualizarItem(props.id, {
         quantidadeTotal: quantidade,
@@ -29,6 +31,8 @@ export function LinhaItem(props: Props) {
         status,
       })
       setEditando(false)
+    } catch (e) {
+      setErro(e instanceof Error ? e.message : 'Não foi possível salvar o item.')
     } finally {
       setSalvando(false)
     }
@@ -93,6 +97,7 @@ export function LinhaItem(props: Props) {
           </select>
         </label>
       </div>
+      {erro && <p className="text-sm text-coral">{erro}</p>}
       <div className="flex gap-2">
         <button
           onClick={salvar}
