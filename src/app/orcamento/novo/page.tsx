@@ -40,15 +40,16 @@ export default async function NovoOrcamentoPage({
     nome: item.nome,
     categoria: item.categoria,
     disponivel: item.disponibilidade.disponivel,
+    total: item.disponibilidade.total,
     precoBaseDiaria: item.precoBaseDiaria,
   }))
 
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-2xl font-bold text-navy">Novo orçamento</h1>
+        <h1 className="font-titulo text-2xl font-semibold text-navy">Novo orçamento</h1>
         <p className="mt-1 text-sm text-cinza-700">
-          Preencha os dados e escolha o equipamento
+          Três passos e o documento sai pronto.
         </p>
       </header>
       <FormularioOrcamento itens={itensDisponiveis} inicioPadrao={inicioTexto} fimPadrao={fimTexto} />

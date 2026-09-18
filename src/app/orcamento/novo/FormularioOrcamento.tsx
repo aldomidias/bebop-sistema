@@ -1,16 +1,37 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { criarOrcamento } from '@/lib/actions/events'
 import { formatarMoeda } from '@/lib/format'
+import { Cartao } from '@/components/Cartao'
+import { Chip, Carrossel } from '@/components/Chip'
+import { Contador } from '@/components/Contador'
+import { Medidor } from '@/components/Medidor'
+import { Led } from '@/components/Led'
+import { Icone } from '@/components/Icones'
+import { BotaoPrimario } from '@/components/Botoes'
+import { iconeDaCategoria, rotuloCurtoDaCategoria } from '@/components/categorias'
 
 type ItemDisponivel = {
   id: string
   nome: string
   categoria: string
   disponivel: number
+  total: number
   precoBaseDiaria: number
+}
+
+const CAMPO = 'h-12 w-full rounded-campo border border-cinza-200 bg-white px-3 text-base text-navy'
+const ROTULO = 'mb-1 block text-xs font-medium text-cinza-700'
+const TODAS = 'Todas'
+
+function NumeroPasso({ n }: { n: number }) {
+  return (
+    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-navy font-titulo text-sm font-semibold text-white">
+      {n}
+    </span>
+  )
 }
 
 export function FormularioOrcamento({
@@ -29,6 +50,12 @@ export function FormularioOrcamento({
   const [valorAjustado, setValorAjustado] = useState('')
   const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
+  const [filtro, setFiltro] = useState(TODAS)
+  const erroRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (erro) erroRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  }, [erro])
 
   const diarias = useMemo(() => {
     const inicio = new Date(`${dataInicio}T00:00:00`).getTime()
@@ -46,16 +73,23 @@ export function FormularioOrcamento({
     return soma * diarias
   }, [selecionados, itens, diarias])
 
+  const categorias = useMemo(() => {
+    const vistas: string[] = []
+    for (const item of itens) if (item.disponivel > 0 && !vistas.includes(item.categoria)) vistas.push(item.categoria)
+    return vistas
+  }, [itens])
+
   const porCategoria = useMemo(() => {
     const mapa = new Map<string, ItemDisponivel[]>()
     for (const item of itens) {
       if (item.disponivel === 0) continue
+      if (filtro !== TODAS && item.categoria !== filtro) continue
       const lista = mapa.get(item.categoria) ?? []
       lista.push(item)
       mapa.set(item.categoria, lista)
     }
     return mapa
-  }, [itens])
+  }, [itens, filtro])
 
   function ajustarQuantidade(itemId: string, valor: number, maximo: number) {
     const quantidade = Math.max(0, Math.min(valor, maximo))
@@ -109,58 +143,39 @@ export function FormularioOrcamento({
   }
 
   return (
-    <form action={aoEnviar} className="space-y-8">
-      <section>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-cinza-700">
-          Cliente e evento
-        </h2>
+    <form action={aoEnviar} className="space-y-5 pb-28">
+      <Cartao>
+        <div className="mb-4 flex items-center gap-3">
+          <NumeroPasso n={1} />
+          <h2 className="font-titulo text-lg font-semibold text-navy">Cliente e evento</h2>
+        </div>
         <div className="grid gap-3 sm:grid-cols-2">
+          <label className="block"><span className={ROTULO}>Nome do cliente</span><input name="clienteNome" required className={CAMPO} /></label>
+          <label className="block"><span className={ROTULO}>Telefone</span><input name="clienteTelefone" type="tel" required className={CAMPO} /></label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Nome do cliente</span>
-            <input name="clienteNome" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Telefone</span>
-            <input name="clienteTelefone" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
-          </label>
-          <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Data de início</span>
-            <input
-              type="date"
-              value={dataInicio}
+            <span className={ROTULO}>Data de início</span>
+            <input type="date" value={dataInicio} required className={CAMPO}
               onChange={(e) => {
                 const novoInicio = e.target.value
                 const novoFim = novoInicio > dataFim ? novoInicio : dataFim
                 setDataInicio(novoInicio)
                 setDataFim(novoFim)
                 router.replace(`/orcamento/novo?inicio=${novoInicio}&fim=${novoFim}`)
-              }}
-              required
-              className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm"
-            />
+              }} />
           </label>
           <label className="block">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Data de término</span>
-            <input
-              type="date"
-              value={dataFim}
-              min={dataInicio}
+            <span className={ROTULO}>Data de término</span>
+            <input type="date" value={dataFim} min={dataInicio} required className={CAMPO}
               onChange={(e) => {
                 const novoFim = e.target.value
                 setDataFim(novoFim)
                 router.replace(`/orcamento/novo?inicio=${dataInicio}&fim=${novoFim}`)
-              }}
-              required
-              className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm"
-            />
+              }} />
           </label>
+          <label className="block sm:col-span-2"><span className={ROTULO}>Local</span><input name="local" required className={CAMPO} /></label>
           <label className="block sm:col-span-2">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Local</span>
-            <input name="local" required className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm" />
-          </label>
-          <label className="block sm:col-span-2">
-            <span className="mb-1 block text-xs font-medium text-cinza-700">Tipo de evento</span>
-            <select name="tipo" defaultValue="casamento" className="w-full rounded-md border border-cinza-200 px-3 py-2 text-sm">
+            <span className={ROTULO}>Tipo de evento</span>
+            <select name="tipo" defaultValue="casamento" className={CAMPO}>
               <option value="casamento">Casamento</option>
               <option value="quinze_anos">15 Anos</option>
               <option value="aniversario">Aniversário</option>
@@ -170,91 +185,100 @@ export function FormularioOrcamento({
           </label>
         </div>
         {diarias > 1 && (
-          <p className="mt-2 text-sm text-cinza-700">
-            {diarias} diárias · os valores abaixo são multiplicados por {diarias}
-          </p>
+          <p className="mt-3 text-sm text-cinza-700">{diarias} diárias · os valores são multiplicados por {diarias}</p>
         )}
-      </section>
+      </Cartao>
 
-      <section>
-        <h2 className="mb-1 text-sm font-semibold uppercase tracking-wide text-cinza-700">
-          Equipamento
-        </h2>
-        <p className="mb-3 text-xs text-cinza-700">
-          Mostrando apenas o que está livre nas datas escolhidas.
-        </p>
-        <div className="space-y-5">
-          {Array.from(porCategoria.entries()).map(([categoria, itensDaCategoria]) => (
-            <div key={categoria}>
-              <h3 className="mb-2 text-xs font-semibold text-navy">{categoria}</h3>
-              <ul className="divide-y divide-cinza-200 rounded-lg border border-cinza-200">
-                {itensDaCategoria.map((item) => (
-                  <li key={item.id} className="flex items-center justify-between gap-3 px-3 py-2.5">
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-navy">{item.nome}</p>
-                      <p className="text-xs text-cinza-700">
-                        {formatarMoeda(item.precoBaseDiaria)} · {item.disponivel} livres
-                      </p>
-                    </div>
-                    <input
-                      type="number"
-                      min={0}
-                      max={item.disponivel}
-                      value={selecionados[item.id] ?? ''}
-                      placeholder="0"
-                      onChange={(e) => ajustarQuantidade(item.id, Number(e.target.value), item.disponivel)}
-                      className="w-20 shrink-0 rounded-md border border-cinza-200 px-2 py-1.5 text-center text-sm"
-                    />
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+      <Cartao>
+        <div className="mb-1 flex items-center gap-3">
+          <NumeroPasso n={2} />
+          <h2 className="font-titulo text-lg font-semibold text-navy">Equipamento</h2>
         </div>
-      </section>
+        <p className="mb-3 text-xs text-cinza-700">Só o que está livre nas datas escolhidas.</p>
+        {categorias.length === 0 ? (
+          <p className="rounded-campo bg-cinza-100 px-4 py-6 text-center text-sm text-cinza-700">
+            Nada livre nessas datas. Tente outra data ou confira a Disponibilidade.
+          </p>
+        ) : (
+          <>
+            <Carrossel>
+              <Chip ativo={filtro === TODAS} onClick={() => setFiltro(TODAS)}>{TODAS}</Chip>
+              {categorias.map((c) => (
+                <Chip key={c} ativo={filtro === c} onClick={() => setFiltro(c)}>{rotuloCurtoDaCategoria(c)}</Chip>
+              ))}
+            </Carrossel>
+            <div className="mt-4 space-y-4">
+              {Array.from(porCategoria.entries()).map(([categoria, lista]) => (
+                <div key={categoria}>
+                  <h3 className="mb-2 text-sm font-semibold text-navy">{categoria}</h3>
+                  <ul className="divide-y divide-cinza-200">
+                    {lista.map((item) => {
+                      const escolhido = selecionados[item.id] ?? 0
+                      return (
+                        <li key={item.id} className="flex items-center gap-3 py-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-botao bg-cinza-100 text-navy">
+                            <Icone nome={iconeDaCategoria(item.categoria)} tamanho={20} />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm font-medium text-navy">{item.nome}</p>
+                            <p className="text-xs text-cinza-700">
+                              {formatarMoeda(item.precoBaseDiaria)} · {item.disponivel - escolhido} {item.disponivel - escolhido === 1 ? 'livre' : 'livres'}
+                            </p>
+                            <Medidor disponivel={item.disponivel - escolhido} total={item.total} className="mt-1.5" />
+                          </div>
+                          <Contador valor={escolhido} maximo={item.disponivel} rotulo={item.nome}
+                            aoMudar={(novo) => ajustarQuantidade(item.id, novo, item.disponivel)} />
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </Cartao>
 
-      <section className="rounded-lg bg-cinza-100 p-4">
+      <Cartao>
+        <div className="mb-4 flex items-center gap-3">
+          <NumeroPasso n={3} />
+          <h2 className="font-titulo text-lg font-semibold text-navy">Valor</h2>
+        </div>
         <div className="flex items-center justify-between">
           <span className="text-sm text-cinza-700">Total calculado</span>
-          <span className="text-xl font-bold text-navy">{formatarMoeda(total)}</span>
+          <span className="font-titulo text-xl font-semibold text-navy">{formatarMoeda(total)}</span>
         </div>
         <label className="mt-3 block">
-          <span className="mb-1 block text-xs font-medium text-cinza-700">
-            Valor final (deixe vazio para usar o calculado)
-          </span>
-          <input
-            type="number"
-            step="0.01"
-            min={0}
-            value={valorAjustado}
-            onChange={(e) => setValorAjustado(e.target.value)}
-            placeholder={String(total)}
-            className="w-full rounded-md border border-cinza-200 bg-white px-3 py-2 text-sm"
-          />
+          <span className={ROTULO}>Valor final (deixe vazio para usar o calculado)</span>
+          <input type="number" inputMode="decimal" step="0.01" min={0} value={valorAjustado}
+            onChange={(e) => setValorAjustado(e.target.value)} placeholder={String(total)} className={CAMPO} />
         </label>
         <label className="mt-3 block">
-          <span className="mb-1 block text-xs font-medium text-cinza-700">Observações</span>
-          <textarea
-            name="observacoes"
-            rows={2}
-            className="w-full rounded-md border border-cinza-200 bg-white px-3 py-2 text-sm"
-          />
+          <span className={ROTULO}>Observações</span>
+          <textarea name="observacoes" rows={2} className="w-full rounded-campo border border-cinza-200 bg-white px-3 py-2 text-base text-navy" />
         </label>
-      </section>
+      </Cartao>
 
       {erro && (
-        <p className="whitespace-pre-line rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
-          {erro}
-        </p>
+        <div ref={erroRef} role="alert" className="rounded-cartao border border-vermelho/30 bg-white p-4 shadow-card">
+          <Led tom="vermelho" rotulo="Não deu para gerar" />
+          <p className="mt-2 whitespace-pre-line text-sm text-tinta">{erro}</p>
+        </div>
       )}
 
-      <button
-        type="submit"
-        disabled={enviando}
-        className="w-full rounded-lg bg-navy px-6 py-3 font-medium text-white disabled:opacity-50"
-      >
-        {enviando ? 'Gerando...' : 'Gerar orçamento'}
-      </button>
+      <div className="fixed bottom-16 left-0 right-0 z-40 border-t border-cinza-200 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:sticky md:bottom-0 md:rounded-cartao md:border">
+        <div className="mx-auto flex max-w-4xl items-center gap-4 px-4 py-3">
+          <div className="min-w-0">
+            <p className="text-xs text-cinza-700">Total</p>
+            <p className="font-titulo text-xl font-bold leading-tight text-navy">
+              {formatarMoeda(valorAjustado.trim() === '' ? total : Number(valorAjustado))}
+            </p>
+          </div>
+          <BotaoPrimario type="submit" disabled={enviando} className="flex-1">
+            {enviando ? 'Gerando…' : 'Gerar orçamento'}
+          </BotaoPrimario>
+        </div>
+      </div>
     </form>
   )
 }
